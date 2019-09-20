@@ -9,10 +9,14 @@
     <div class="container" style="max-width: 500px">
       <h1>Pre-paid Parking Form</h1>
       <form id="parking-form">
+
+        <!-- NAME AREA -->
         <div class="input-field" id="name-field">
           <label for="name">Name</label>
           <input id="name" type="text">
         </div>
+
+        <!-- CAR AREA -->
         <div class="input-field" id="car-field">
           <label for="car-year">Car</label>
           <div class="input-group">
@@ -21,18 +25,26 @@
             <input id="car-model" type="text" placeholder="Model">
           </div>
         </div>
+
+        <!-- DATE AREA - PARKING -->
         <div class="input-field" id="start-date-field">
           <label for="start-date">Date parking</label>
           <input id="start-date" type="date">
         </div>
+
+        <!-- DAY AREA -->
         <div class="input-field" id="days-field">
           <label for="days">Number of days</label>
           <input id="days" type="text">
         </div>
+
+        <!-- CREDIT CARD AREA -->
         <div class="input-field" id="credit-card-field">
           <label for="credit-card">Credit Card</label>
           <input id="credit-card" type="text">
         </div>
+
+        <!-- CVV AREA -->
         <div class="row">
           <div class="col">
             <div class="input-field" id="cvv-field">
@@ -40,6 +52,8 @@
               <input id="cvv" type="text">
             </div>
           </div>
+
+          <!-- EXPIRATION DATE AREA -->
           <div class="col">
             <div class="input-field" id="expiration-field">
               <label for="expiration">Expiration</label>
@@ -47,11 +61,13 @@
             </div>
           </div>
         </div>
+
         <div class="input-field">
           <button id="submit-button" type="submit">Make reservation</button>
         </div>
       </form>
+
       <div id="total"></div>
-      <script src="script.js"></script>
+      <script src="script.js" defer></script>
   </body>
 </html>
