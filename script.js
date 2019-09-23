@@ -1,5 +1,7 @@
 console.log('Hey, your JS is connected')
 const now = new Date()
+let validity = 0
+// Alex Gizzi came up with this and it works great ^^^^
 
 function query (selector) {
     return document.querySelector(selector);
@@ -32,7 +34,7 @@ function markInvalid(field, errorMessage) {
 function sumOfDays(field, startDate) {
     // Make this dynamic towards the StartDate 
     let today = new Date(startDate)
-    today = setDate(today.getDay() + 1)
+    // today = today.setDate(today.getDate() + 1)
     let amount = Number(field.value) 
     let sum = 0
     for (let i = 0; i < amount; i++) {
@@ -79,36 +81,55 @@ function isDateTodayorLater(date) {
 };
 
 // Checking to see if the field is valid (only if empty)
-// typeof(field.value) === Number && 
 function check(field, errorMessage) {
     if (field.id === "car-year") {
-        field = Number(field.value)
-        if (field > 1900 && field <= now.getFullYear()) {
+        let fieldNumber = Number(field.value)
+        if (fieldNumber >= 1900 && fieldNumber <= now.getFullYear()) {
             markValid(field)
+            validity++
         } else {
             markInvalid(field, errorMessage)
         }
     } else if (field.id === "start-date") {
         if (isDateTodayorLater(query('#start-date').value)) {
             markValid(field)
+            validity++
         } else {
             markInvalid(field, errorMessage)
         }
     } else if (field.id === "days") {
-        if (field.value === Number && (field.value > 1 && field.value < 30)) {
+        let fieldNumber = Number(field.value)
+        if (fieldNumber >= 1 && fieldNumber <= 30) {
             markValid(field)
+            validity++
         } else {
             markInvalid(field, errorMessage)
         }
     } else if (field.id === "credit-card") {
         if (validateCardNumber(field.value)) {
             markValid(field)
+            validity++
         } else {
             markInvalid(field, errorMessage)
         }
     } else if (field.id === "cvv") {
-        if (field.value.length === 3) {
+        let fieldNumber = Number(field.value)
+        if (field.value.length === 3 && !isNaN(fieldNumber)) {
             markValid(field)
+            validity++
+        } else {
+            markInvalid(field, errorMessage)
+        }
+    } else if (field.id === "expiration") {
+        let expire = field.value.split('/')
+        expire[0] = Number(expire[0])
+        expire[1] = Number(expire[1])
+        if (expire[1] > (now.getYear() - 100) && expire[0] > 0 && expire[0] < 13) {
+            markValid(field)
+            validity++
+        } else if (expire[1] === (now.getYear() - 100) && expire[0] >= (now.getMonth() + 1) && expire[0] < 13) {
+            markValid(field)
+            validity++
         } else {
             markInvalid(field, errorMessage)
         }
@@ -116,6 +137,7 @@ function check(field, errorMessage) {
         markInvalid(field, errorMessage)
     } else {
         markValid(field)
+        validity++
     }
 };
 
@@ -140,9 +162,23 @@ query('#parking-form').addEventListener('submit', function(event) {
         } else {
             check(inputs[i], errorMessage)
         }
+        
     }
-    let total = document.querySelector('#total')
-    sumOfDays(total)
+    if (validity === 9) {
+        let numOfDays = document.querySelector('#days')
+        let startDate = query('#start-date')
+        let total = sumOfDays(numOfDays, startDate)
+        let totalDiv = query('#total')
+        let totalEle = document.createElement('div')
+        totalEle.classList.add('text-bold', 'text-success')
+        totalEle.innerHTML = total + " is your total for parking"
+        totalDiv.appendChild(totalEle)
+    } else {
+        let errorChild = query('.text-success')
+        errorChild.remove()
+        console.log(validity)
+        validity = 0 
+    }
 });
 
 // Tests 
